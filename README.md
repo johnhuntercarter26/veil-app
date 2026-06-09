@@ -43,7 +43,7 @@ Privacy isn't a feature here, it's the foundation:
 
 ## Status
 
-🚧 **Active development** — solo project, iterating one change at a time.
+**Active development** — solo project, iterating one change at a time.
 
 ## Progress so far
 
