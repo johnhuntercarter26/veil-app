@@ -1,116 +1,41 @@
 # Veil
 
-**A privacy-first period and reproductive health tracker, and an experiment in whether a vibe-coded app can be genuinely secure.**
+Privacy-first period and reproductive health tracker.
 
-Veil is built almost entirely through AI-assisted ("vibe-coded") development on the
-[Base44](https://base44.com) platform. But it's more than an app. It's a test of a
-thesis. The common assumption is that vibe-coding trades away security for speed, that
-apps built this way are inherently leaky. Veil is the counter-argument: an attempt
-to build, and prove out, a vibe-coded application that handles some of the most sensitive
-data there is (reproductive health) while holding to a real, defensible privacy standard.
+## What Veil is
 
-The evidence so far says it can be done.
-
-> **Disclaimer:** Veil is for personal tracking and informational purposes only.
-> Its predictions are estimates, not medical advice. It is not a contraceptive tool
-> and should not be relied on to prevent or achieve pregnancy. Consult a healthcare
-> professional for medical concerns.
-
----
+Veil is a private cycle and reproductive health tracking app. It is built to keep sensitive health data tied to the person it belongs to and no one else. The guiding idea is simple. Collect as little as possible, lock down what is collected so each user can only ever see their own data, and keep the app small enough that mistakes have nowhere to hide.
 
 ## The thesis
 
-Can an application be vibe-coded from end to end and still be secure enough to trust with
-sensitive health data? Veil treats that as a question to answer with evidence, not assume.
-The approach:
+Veil is also an experiment with a clear claim behind it. An app built largely with AI assisted development can be made genuinely private and secure, as long as every change is reviewed deliberately rather than trusted on faith. This repository documents that work in the open as evidence that it can be done, not as a neutral case study.
 
-- **Security is a first-class requirement, not an afterthought.** Every data feature is
-  built and then verified against a simple standard: each user can only ever reach their own data.
-- **Simplicity as a security strategy.** Collect as little as possible, and add features only
-  when they earn their place. Less surface area means fewer places for mistakes to hide.
-- **Verify, don't assume.** The codebase and its data rules are reviewed directly, not taken on faith.
+A recurring lesson sits at the center of the project. The same AI that writes the code is not a reliable judge of whether that code is safe. Reviewing the actual files, rather than trusting automated summaries, is what closes the gap.
 
-An honest caveat, because a credible claim names its limits: "no issues found" is not
-"provably secure," and self-review plus platform tooling is not a substitute for independent
-professional audit. The thesis isn't "this is unbreakable." It's that "vibe-coded" and "genuinely
-secure" are not mutually exclusive, and here's the work to back that up.
+## Current status
 
-## What Veil does
+In active development. Core tracking, predictions, calendar, and settings are working. A full review of the data layer and the application code has been completed, and the most recent round of fixes has been verified against live data. The app is not yet submitted to the App Store.
 
-- **Daily logging.** Track period days, flow, symptoms, sleep quality, mood, and private notes.
-- **Calendar view.** See your cycle at a glance, with estimated period, fertile, and ovulation markers.
-- **Cycle predictions.** Estimated period, fertile window, and ovulation days based on your history.
-- **Insights.** Cycle-length trends, most-logged symptoms, and cycle history, computed from your own data.
-- **Health tab.** Read-only wellness suggestions (nutrition, exercise, self-care) based on your estimated cycle phase.
-- **Personalization.** Customizable symptom and mood lists, theme color, and a device-synced dark mode.
-- **Privacy mode.** An on-screen shield that hides sensitive details at a glance.
-- **Data control.** Export or delete your data from Settings.
-- **Feedback.** A simple way for users to send suggestions.
+## What has been done
 
-## Privacy and security posture
+Data access is locked down. Every data table restricts access so that a user can reach only their own records, and any table that should never be read back by users is write only by design. Anonymous access and cross account access to health data are closed.
 
-This is where the thesis gets tested. The standard Veil holds to:
+Data handling has been tightened. The app collects only what it needs, keeps no secrets in plain text, and does not log or persist sensitive data to the device. The data export feature produces a clean, readable copy that leaves out internal system fields.
 
-- **Per-user data isolation.** Every record is locked to its owner. A user can only
-  read, edit, or delete their own data, and no admin or other account can reach it.
-- **No anonymous access.** Health data is never readable by signed-out visitors or other accounts.
-- **Data minimization.** The app stores only what it needs to function.
-- **Auth handled by the platform.** Passwords are never stored or handled by the app; sign-in is managed by Base44.
-- **Nothing sensitive on the device.** Cycle data is not persisted to local storage, and nothing sensitive is logged.
-- **Secrets stay secret.** Keys and credentials live in the platform's secrets store, never in the codebase.
-- **Routine verification.** The data rules and code are re-checked after any change that touches data.
+The delete my data flow now fully honors its promise. Choosing to delete all data removes every record the user owns across all relevant tables and resets the account to a blank state, the same as a fresh start. This was verified directly against the database before and after deletion.
 
-## Built with
+Symptom records are now stored in a readable form. This corrected a display problem where logged symptoms showed up as internal codes, and it made the data export human readable as a result.
 
-- **Base44** for the managed backend (database, auth, permissions) and AI-assisted builder
-- **React** and **Vite**
-- **Tailwind CSS**
-- **TanStack Query** (`@tanstack/react-query`) for data fetching
-- **date-fns** for date math
-- **Recharts** for insights charts
-- **lucide-react** for icons
+Dark mode readability was fixed. Theme handling was consolidated into a single shared routine, so color choices now apply correctly in both light and dark mode and cannot drift out of sync between screens.
 
-## Status
+## What is left to do
 
-**Active development.** Solo project, iterating one change at a time. Mobile-first, intended for App Store release.
+True account deletion and anonymous feedback. Both depend on backend functions that require a paid platform plan. The current flow clears all user data, and full account removal is the next step once that plan is in place.
 
-## Progress so far
+A small set of polish and consistency items remain. These include a duplicate seeding edge case in the default options, a built screen that is not yet linked into navigation and needs to be either wired in or removed, and a minor theme refresh case when switching between light and dark mode.
 
-- [x] Core cycle logging, calendar, predictions, and insights
-- [x] Read-only Health tab with phase-based wellness suggestions
-- [x] Customizable per-user symptom and mood lists
-- [x] Privacy mode applied consistently across all data screens
-- [x] Data export (stripped to content fields, readable symptom labels, unencrypted-file warning)
-- [x] Device-synced dark mode (defaults to light) with contrast pass on badges and banners
-- [x] **Full data-layer security pass.** Every table locked to its owner; removed a legacy admin
-      backdoor on cycle logs; verified no privilege-escalation path
-- [x] **Full code-layer security review.** Every file reviewed or verified; data access relies on
-      server-enforced per-user rules; auth defers to the platform; no secrets or sensitive logging found
+Publish this repository and prepare for App Store submission.
 
-## Roadmap
+## Privacy stance
 
-- [ ] **Complete data deletion.** "Delete all my data" should also clear custom symptom/mood lists;
-      "delete account" should fully remove the account (needs a backend function)
-- [ ] **Anonymous feedback.** Submit feedback without it being tied to the account (needs a backend function)
-- [ ] **Health tab scope decision.** Keep read-only, or expand into new sections (would mean collecting new data)
-- [ ] **Mobile and App Store readiness.** Native wrapper, privacy policy, store data declarations, mobile-specific review
-- [ ] Polish pass: error handling on save/delete, minor display fixes
-- [ ] Ongoing security re-checks after any new data feature
-- [ ] Screenshots and demo
-- [ ] License
-
-## Development notes
-
-This is a Base44-hosted app, so the backend (database, auth, permissions) is managed by
-the platform rather than run locally. The code here mirrors the app's front end.
-
-- Do **not** commit secrets. Keep API keys and credentials in Base44's secrets store.
-- Environment and secret files should be listed in `.gitignore` and never pushed.
-
-## License
-
-_TBD._
-
----
-
-*Last updated: 2026-06-10*
+Health data in Veil is tied to a single account and is not sold or used to target advertising. Where the platform gives the app owner visibility into stored data, that reality is documented plainly rather than hidden. The aim is honesty about what is and is not possible on the current stack, alongside a steady effort to keep what the app can see to a minimum.
