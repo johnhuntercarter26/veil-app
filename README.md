@@ -10,13 +10,13 @@ Veil is a private cycle and reproductive health tracking app. It is built to kee
 
 Veil is also an experiment with a clear claim behind it. An app built largely with AI assisted development can be made genuinely private and secure, as long as every change is reviewed deliberately rather than trusted on faith. This repository documents that work in the open as evidence that it can be done, not as a neutral case study.
 
-A recurring lesson sits at the center of the project. The same AI that writes the code is not a reliable judge of whether that code is safe. Reviewing the actual files and inspecting the real stored data, rather than trusting that something looks correct, is what closes the gap. More than one issue here was a feature that appeared to work on the surface while behaving differently underneath, and only a direct look at the live data revealed the truth.
+A recurring lesson sits at the center of the project. The same AI that writes the code is not a reliable judge of whether that code is safe. Reviewing the actual files and inspecting the real stored data, rather than trusting that something looks correct, is what closes the gap. More than one issue here turned out differently than the surface suggested. One reported bug did not exist at all in the current code, and the only way to know that was to check the real exported output instead of acting on an assumption, which avoided changing working code for no reason.
 
 ## Current status
 
 In active development.
 
-Recent work has focused on making the app's promises literally true. Data deletion now fully clears every piece of a user's data rather than leaving fragments behind, and the deletion action no longer claims more than it actually does. Settings now save reliably and the app reflects saved changes immediately, which was traced to a stale profile cache rather than a failed write. Each fix was verified against the live data, not just the code.
+Recent work has focused on correctness and on making the app's promises literally true. Data deletion now fully clears every piece of a user's data, and the deletion action no longer claims more than it does. Settings save reliably and the app reflects saved changes immediately. Default symptom and mood lists can no longer be duplicated behind the scenes, a fix confirmed by inspecting the stored data directly. Onboarding now stands on its own as a clean full-screen setup flow without stray app navigation. Each change was verified against the running app or the live data, not just the code.
 
 ## Privacy stance
 
@@ -27,7 +27,7 @@ Health data in Veil is tied to a single account and is not sold or used to targe
 - True account deletion, so closing an account removes the login itself and not only its data. This depends on backend functions available on a paid platform tier.
 - Genuinely anonymous feedback, also dependent on backend functions.
 - Ensure in app notices, including the warning that an exported file is unencrypted, are always shown to the user.
-- Resolve readable symptom names in exported data.
+- Decide the fate of the Insights screen, which exists but is not yet linked into navigation.
 - Publish to the App Store.
 
 ## Notes for contributors
@@ -41,4 +41,4 @@ TBD.
 
 ---
 
-Last updated: 2026-06-13
+Last updated: 2026-06-15
